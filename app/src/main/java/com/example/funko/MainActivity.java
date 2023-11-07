@@ -4,15 +4,17 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.ContentValues;
 import android.database.Cursor;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.RadioButton;
+import android.widget.Switch;
 import android.widget.TextView;
 
 public class MainActivity extends Activity {
+    Switch onOrOffSwitch;
     Button insertButton;
     Button queryButton;
     Button updateButton;
@@ -47,12 +49,28 @@ public class MainActivity extends Activity {
 
             mUpdateValues.put(FunkoPops.COLUMN_POPNAME, popName.getText().toString().trim());
             mUpdateValues.put(FunkoPops.COLUMN_POPTYPE, popType.getText().toString().trim());
+            mUpdateValues.put(FunkoPops.COLUMN_POPPRICE, popPrice.getText().toString().trim());
+            mUpdateValues.put(FunkoPops.COLUMN_POPFANDOM, popFandom.getText().toString().trim());
+            mUpdateValues.put(FunkoPops.COLUMN_POPULTIMATE, popUltimate.getText().toString().trim());
+            mUpdateValues.put(FunkoPops.COLUMN_POPNUM, popNum.getText().toString().trim());
+            if(onOrOffSwitch.isChecked()){
+                mUpdateValues.put(FunkoPops.COLUMN_POPON, true);
+            }
+            else{
+                mUpdateValues.put(FunkoPops.COLUMN_POPON, false);
+            }
 
-            String mSelectionClause = FunkoPops.COLUMN_POPNAME + " = ? ";
-//                + " AND " + NamesProvider.COLUMN_LASTNAME + " = ? ";
 
-            String[] mSelectionArgs = { NameText.getText().toString().trim()};
-//                , lnameTv.getText().toString().trim() };
+            String mSelectionClause = FunkoPops.COLUMN_POPNAME + " = ? AND "
+                + FunkoPops.COLUMN_POPTYPE + " = ? AND "
+                     + FunkoPops.COLUMN_POPNUM + " = ? AND "
+                     + FunkoPops.COLUMN_POPFANDOM + " = ? AND "
+                    + FunkoPops.COLUMN_POPON+ " = ? AND "
+                     + FunkoPops.COLUMN_POPULTIMATE+ " = ? AND "
+                     + FunkoPops.COLUMN_POPPRICE + " = ? ";
+
+            String[] mSelectionArgs = { NameText.getText().toString().trim(), TypeText.getText().toString().trim(), NumText.getText().toString().trim(),
+            TypeFandomText.getText().toString().trim(), ultimateText.getText().toString().trim(), priceText.getText().toString().trim(), onText.getText().toString().trim()};
 
             int numRowsUpdates= getContentResolver().update(FunkoPops.CONTENT_URI, mUpdateValues,
                     mSelectionClause, mSelectionArgs);
@@ -66,10 +84,15 @@ public class MainActivity extends Activity {
         @Override
         public void onClick(View v) {
             String mSelectionClause = FunkoPops.COLUMN_POPNAME + " = ? " + " AND " +
-                    FunkoPops.COLUMN_POPTYPE + " = ? ";
+                    FunkoPops.COLUMN_POPTYPE + " = ? " +
+                    "AND " + FunkoPops.COLUMN_POPFANDOM + " = ? " +
+                    "AND " + FunkoPops.COLUMN_POPULTIMATE + " = ? " +
+                    "AND " + FunkoPops.COLUMN_POPON + " = ? " +
+                    "AND " + FunkoPops.COLUMN_POPPRICE + " = ? " +
+                    "AND " + FunkoPops.COLUMN_POPNUM + " = ? ";
 
             String[] mSelectionArgs = { NameText.getText().toString().trim(),
-                    TypeText.getText().toString().trim() };
+                    TypeText.getText().toString().trim(), NumText.getText().toString().trim(), TypeFandomText.getText().toString().trim(), ultimateText.getText().toString().trim(), priceText.getText().toString().trim(), onText.getText().toString().trim()};
 
             int mRowsDeleted = getContentResolver().delete(FunkoPops.CONTENT_URI, mSelectionClause,
                     mSelectionArgs);
@@ -89,10 +112,14 @@ public class MainActivity extends Activity {
             mNewValues.put(FunkoPops.COLUMN_POPNUM, popNum.getText().toString().trim());
             mNewValues.put(FunkoPops.COLUMN_POPFANDOM, popFandom.getText().toString().trim());
             mNewValues.put(FunkoPops.COLUMN_POPPRICE, popPrice.getText().toString().trim());
-
+            if(onOrOffSwitch.isChecked()){
+                mNewValues.put(FunkoPops.COLUMN_POPON, true);
+            }
+            else{
+                mNewValues.put(FunkoPops.COLUMN_POPON, false);
+            }
 
             mNewValues.put(FunkoPops.COLUMN_POPULTIMATE, popUltimate.getText().toString().trim());
-            mNewValues.put(FunkoPops.COLUMN_POPPRICE, popPrice.getText().toString().trim());
 
             getContentResolver().insert(FunkoPops.CONTENT_URI, mNewValues);
 
@@ -163,9 +190,16 @@ public class MainActivity extends Activity {
         NumText = findViewById(R.id.textPopNumber);
         TypeText = findViewById(R.id.textPopType);
         TypeFandomText = findViewById(R.id.textPopFandom);
-        onText = findViewById(R.id.textPopOn);
+        onText = findViewById(R.id.textOnPop);
         ultimateText = findViewById(R.id.textPopUltimate);
         priceText = findViewById(R.id.textPopPrice);
+        onOrOffSwitch = findViewById(R.id.OnOrOff);
+
+        if (onOrOffSwitch.isChecked()) {
+            onText.setText("On");
+        } else {
+            onText.setText("Off");
+        }
 
 
         nextButton = findViewById(R.id.buttonRight);

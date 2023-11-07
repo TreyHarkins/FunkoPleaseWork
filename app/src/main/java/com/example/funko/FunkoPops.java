@@ -83,7 +83,7 @@ public class FunkoPops extends ContentProvider {
         String fPopNum = values.getAsString(COLUMN_POPNUM).trim();
         String fPopUlt = values.getAsString(COLUMN_POPULTIMATE).trim();
         String fPopPrice = values.getAsString(COLUMN_POPPRICE).trim();
-
+        Boolean fPopOn = values.getAsBoolean(COLUMN_POPON);
         String fPopFandom = values.getAsString(COLUMN_POPFANDOM).trim();
 
 
